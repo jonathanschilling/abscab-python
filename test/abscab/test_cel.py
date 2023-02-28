@@ -2,7 +2,7 @@ import os
 import sys
 import numpy as np
 
-abscab_path = os.path.abspath("../../../main/python")
+abscab_path = os.path.abspath("../..")
 if not abscab_path in sys.path:
     sys.path.append(abscab_path)
 
@@ -33,9 +33,8 @@ def test_cel():
     status = 0
     status |= assertRelAbsEquals(cel1, c1, tolerance)
     status |= assertRelAbsEquals(cel2, c2, tolerance)
-    return status
 
-if __name__ == "__main__":
-    status = 0
-    status |= test_cel()
-    sys.exit(status)
+    if status != 0:
+        return status
+    else:
+        return None

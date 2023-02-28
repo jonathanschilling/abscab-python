@@ -2,7 +2,7 @@ import os
 import sys
 import numpy as np
 
-abscab_path = os.path.abspath("../../../main/python")
+abscab_path = os.path.abspath("../..")
 if not abscab_path in sys.path:
     sys.path.append(abscab_path)
 
@@ -13,24 +13,24 @@ from abscab import straightWireSegment_A_z,   \
                    circularWireLoop_B_z,      \
                    MU_0, \
                    magneticFieldPolygonFilament
-                   
+
 from abscab_util import assertRelAbsEquals
 
 def testStraightWireSegment():
-    
-    test_points_rp = np.loadtxt("../../resources/testPointsRpStraightWireSegment.dat")
-    test_points_zp = np.loadtxt("../../resources/testPointsZpStraightWireSegment.dat")
-    
+
+    test_points_rp = np.loadtxt("test/resources/testPointsRpStraightWireSegment.dat")
+    test_points_zp = np.loadtxt("test/resources/testPointsZpStraightWireSegment.dat")
+
     numCases = len(test_points_rp)
     if len(test_points_zp) != numCases:
         raise RuntimeError("number of test point coordinates needs to agree (is numR=%d, numZ=%d)"%(numCases, len(test_points_zp)))
-        
-    aZRef   = np.loadtxt("../../resources/StraightWireSegment_A_z_ref.dat")
-    bPhiRef = np.loadtxt("../../resources/StraightWireSegment_B_phi_ref.dat")
-    
+
+    aZRef   = np.loadtxt("test/resources/StraightWireSegment_A_z_ref.dat")
+    bPhiRef = np.loadtxt("test/resources/StraightWireSegment_B_phi_ref.dat")
+
     toleranceAZ   = 1.0e-15
     toleranceBPhi = 1.0e-15
-    
+
     status = 0
     for i in range(numCases):
 
@@ -62,25 +62,28 @@ def testStraightWireSegment():
         if status != 0:
             break
 
-    return status
-        
+    if status != 0:
+        return status
+    else:
+        return None
+
 def testCircularWireLoop():
-    
-    test_points_rp = np.loadtxt("../../resources/testPointsRpCircularWireLoop.dat")
-    test_points_zp = np.loadtxt("../../resources/testPointsZpCircularWireLoop.dat")
-    
+
+    test_points_rp = np.loadtxt("test/resources/testPointsRpCircularWireLoop.dat")
+    test_points_zp = np.loadtxt("test/resources/testPointsZpCircularWireLoop.dat")
+
     numCases = len(test_points_rp)
     if len(test_points_zp) != numCases:
         raise RuntimeError("number of test point coordinates needs to agree (is numR=%d, numZ=%d)"%(numCases, len(test_points_zp)))
-        
-    aPhiRef = np.loadtxt("../../resources/CircularWireLoop_A_phi_ref.dat")
-    bRhoRef = np.loadtxt("../../resources/CircularWireLoop_B_rho_ref.dat")
-    bZRef   = np.loadtxt("../../resources/CircularWireLoop_B_z_ref.dat")
-    
+
+    aPhiRef = np.loadtxt("test/resources/CircularWireLoop_A_phi_ref.dat")
+    bRhoRef = np.loadtxt("test/resources/CircularWireLoop_B_rho_ref.dat")
+    bZRef   = np.loadtxt("test/resources/CircularWireLoop_B_z_ref.dat")
+
     toleranceAPhi = 1.0e-15
     toleranceBRho = 1.0e-13
     toleranceBZ   = 1.0e-14
-    
+
     status = 0
     for i in range(numCases):
 
@@ -109,7 +112,7 @@ def testCircularWireLoop():
             print("  ref B_rho = %+.17e"%(bRhoRef[i],));
             print("  act B_rho = %+.17e"%(bRho,));
         status |= bRhoStatus
-        
+
         bZStatus = assertRelAbsEquals(bZRef[i], bZ, toleranceBZ);
         if bZStatus != 0:
             print("error: mismatch at Circular Wire Loop B_z test case %d"%(i,));
@@ -121,8 +124,11 @@ def testCircularWireLoop():
 
         if status != 0:
             break
-        
-    return status
+
+    if status != 0:
+        return status
+    else:
+        return None
 
 def testMagneticFieldInfiniteLineFilament():
     tolerance = 1.0e-15
@@ -155,7 +161,12 @@ def testMagneticFieldInfiniteLineFilament():
     relAbsErr = np.abs(bPhi - bPhiRef) / (1.0 + np.abs(bPhiRef))
     # print("raErr = %.5e"%(relAbsErr,))
 
-    return assertRelAbsEquals(bPhiRef, bPhi, tolerance)
+    status = assertRelAbsEquals(bPhiRef, bPhi, tolerance)
+
+    if status != 0:
+        return status
+    else:
+        return None
 
 def testBPhiInfiniteLineFilament():
     tolerance = 1.0e-15
@@ -182,7 +193,12 @@ def testBPhiInfiniteLineFilament():
     relAbsErr = np.abs(bPhi - bPhiRef) / (1.0 + np.abs(bPhiRef))
     # print("raErr = %.5e"%(relAbsErr,))
 
-    return assertRelAbsEquals(bPhiRef, bPhi, tolerance)
+    status = assertRelAbsEquals(bPhiRef, bPhi, tolerance)
+
+    if status != 0:
+        return status
+    else:
+        return None
 
 def testMagneticFieldInsideLongCoil():
     tolerance = 1.0e-4
@@ -201,7 +217,7 @@ def testMagneticFieldInsideLongCoil():
     L       = 50.0  # total length of coil in m
     current = 10.0  # A
     radius  = 1.0   # m
-    
+
     n = N/L   # winding density: windings per m
 
     bZ = 0.0;
@@ -222,14 +238,9 @@ def testMagneticFieldInsideLongCoil():
     relAbsErr = np.abs(bZ - bZRef) / (1.0 + np.abs(bZRef))
     # print("raErr = %.5e"%(relAbsErr,))
 
-    return assertRelAbsEquals(bZRef, bZ, tolerance)
-        
-if __name__ == "__main__":
-    status = 0
-    status |= testStraightWireSegment()
-    status |= testCircularWireLoop()
-    status |= testMagneticFieldInfiniteLineFilament()
-    status |= testBPhiInfiniteLineFilament()
-    status |= testMagneticFieldInsideLongCoil()
-    sys.exit(status)
-    
+    status = assertRelAbsEquals(bZRef, bZ, tolerance)
+
+    if status != 0:
+        return status
+    else:
+        return None
