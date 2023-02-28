@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Install dependencies
-      run: pip3 install sphinx-rtd-theme
+      run: sudo pip3 install sphinx-rtd-theme
     
     - uses: ammaraskar/sphinx-action@master
       with:
