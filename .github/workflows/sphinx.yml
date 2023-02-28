@@ -33,6 +33,7 @@ jobs:
       - name: Sphinx
         uses: ammaraskar/sphinx-action@master
         with:
+          build-command: "sphinx-build -M html source build"
           docs-folder: "docs/"
         
       - name: Setup Pages
