@@ -28,7 +28,7 @@ This is the Python implementation of [ABSCAB](https://github.com/jonathanschilli
 
 | description         | link to file |
 | ------------------- | --------------------------------------------------------- |
-| main implementation | [`abscab.py`](src/main/python/abscab/_abscab.py)          |
-| unit tests          | [`test_abscab.py`](src/test/python/abscab/test_abscab.py) |
-| demo code           | [`demo_abscab.py`](src/test/python/abscab/demo_abscab.py) |
+| main implementation | [`abscab.py`](abscab/_abscab.py)          |
+| unit tests          | [`test_abscab.py`](test/abscab/test_abscab.py) |
+| demo code           | [`demo_abscab.py`](test/abscab/demo_abscab.py) |
 | parallelized        | :heavy_multiplication_x:                                  |
